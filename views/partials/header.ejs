@@ -1,0 +1,74 @@
+<style>
+    .active{
+        font-weight: 600;
+    }
+    #movies, #users{
+      display: flex;
+      flex-flow: wrap;
+      gap: 1rem;
+      justify-content: flex-start;
+    }
+    #movies > div, #users > div{
+      width: 350px;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100vh;
+    }
+    .container{
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .card-body:hover{
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      transition: 300ms ease-in-out;
+    }
+    
+</style>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+
+<header>
+  <nav class="navbar navbar-expand navbar-light bg-light">
+    <a class="navbar-brand" href="#">Movie Time</a>
+    
+    <div class="mr-auto" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="/home">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/myOrders">My Orders</a>
+        </li>
+        <li class="nav-item" >
+            <a class="nav-link" href="/chat">Chat</a>
+        </li>
+        <li class="nav-item " >
+            <a class="nav-link" href="/admin">Admin Page</a>
+        </li>
+      </ul>
+    </div>
+    <span>Hi, <%= name %></span>
+    <form style="margin-bottom: 0; margin-left: 10px;" action="/api/logout"><input class="btn btn-link" type="submit" value="Logout"/></form>
+  </nav>
+</header>
+<script>
+    $(function() { 
+        $('li.nav-item').removeClass('active')
+        let href = location.pathname.split('/').slice(-1)[0];
+        $('a[href$="'+ href + '"]').parent().addClass('active')
+        
+    })
+</script>
+
+<% if ( name !== 'admin') {%>
+    <script>
+        $('a[href$="admin"]').parent().hide()
+    </script>
+<% } %>

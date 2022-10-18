@@ -1,0 +1,54 @@
+<%- include("partials/header") %>
+<div class="container">
+  <div id="orders"></div>
+</div>
+
+<%- include("partials/footer") %>
+
+<script>
+  $(function () {
+    $.ajax({
+      type: "GET",
+      url: "/api/orders",
+      async: false,
+      success: function (result) {
+        let moviesDict = {};
+
+        if (result.length === 0) {
+          $("#orders").append("<h3>No orders made yet!</h3>");
+        }
+
+        $.ajax({
+          type: "GET",
+          url: "/api/movies",
+          async: false,
+          success: function (result2) {
+            result2.forEach((element) => {
+              moviesDict[element.movieId] = element;
+            });
+          },
+        });
+
+        //   $('#orders').html(result);
+        result.forEach((element) => {
+          movieObject = moviesDict[element.movieId];
+
+          $("#orders").append(`<div class="card mt-4">
+                                      <div class="card-body">
+                                        <h4 class="card-title">${
+                                          movieObject.movieName
+                                        }</h4>
+                                        <div class="card-subtitle text-muted mb-2">Price: ${
+                                          movieObject.price
+                                        }
+                                        </div>
+                                        <div class="card-text mb-2">Purchase At: ${new Date(
+                                          element.createdAt
+                                        ).toDateString()}</div>
+                                      </div>
+                                    </div>`);
+        });
+      },
+    });
+  });
+</script>

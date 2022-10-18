@@ -1,0 +1,120 @@
+<%- include("partials/header") %>
+
+<div class="container">
+
+    <section>
+        <h3>Add Movie </h3>
+        <form action="/api/movies" method="POST">
+            <div>
+                <label for="movieName">Movie Name</label>
+                <input class="form-control" type="text" id="movieName" name="movieName" required>
+            </div>
+            <div>
+                <label for="genre">Genre</label>
+                <input class="form-control" type="text" id="genre" name="genre" required>
+            </div>
+            <div>
+                <label for="price">Price</label>
+                <input class="form-control"type="number" id="price" name="price" required>
+            </div>
+            <div>
+                <label for="rating">Rating</label>
+                <input class="form-control" type="number" id="rating" name="rating" required>
+            </div>
+            <button class="btn btn-primary" type="submit">Add Movie</button>
+        </form>
+    </section>
+    <section>
+        <h3>Edit Movies </h3>
+        <div id="movies"></div>
+    </section>
+    <section style="margin-top: 20px">
+        <h3>Manage Users</h3>
+        <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Search User</h5>
+            <div class="input-group mb-3" >
+            <input id="searchInput" type="text" class="form-control" placeholder="Search Username" aria-label="Search Movie" aria-describedby="basic-addon2">
+            <div class="input-group-append">
+              <button id="searchButton" class="btn btn-primary" type="button">Search</button>
+            </div>
+          </div>
+            </div>
+        </div>
+        <h5>Users List </h5>
+        <div id="users" style="display: flex; gap: 1rem;"></div>
+    </section>
+</div>
+<%- include("partials/footer") %>
+
+<script>
+    $(function() { 
+        let usersList;
+    
+        $('#searchButton').on('click', ()=>{
+          let search = $('#searchInput').val();
+          $('#users').html('');
+          usersList.filter(user => user.username.toUpperCase().includes(search.toUpperCase())).forEach(element => {
+              $('#users').append(createUserCard(element))
+          })
+        })
+    
+        // get all users data
+        $.ajax({
+        type: 'GET',
+        url: '/api/user/all',
+        success: function(result) {
+              usersList = result;
+              result.forEach(element => {
+              $('#users').append(createUserCard(element))
+            });
+        }
+      });
+    
+      const createUserCard = (element) =>{
+        return `<div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Username: ${element.username}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Created At: ${new Date(element.createdAt).toDateString()}</h6>
+                        <form action="/api/user/delete" method="POST" class="d-inline" onSubmit="if(!confirm('Are you sure you want to delete?')){return false;}">
+                            <button type="submit" class="btn btn-danger">Delete User</button>
+                            <input type="hidden" name="userId" value="${element.userId}"/>
+                        </form>
+                    </div>
+                </div>`;
+      }
+
+      $.ajax({
+    type: 'GET',
+    url: '/api/movies',
+    success: function(result) {
+          movies = result;
+          result.forEach(element => {
+          $('#movies').append(createMovieCard(element))
+        });
+    }
+  });
+
+  const createMovieCard = (element) =>{
+    return `<div class="card mt-4">
+                <div class="card-body">
+                    <form action="/api/movies/edit" method="POST" class="d-inline">
+                    <h4 class="card-title"><span>Name:</span> <input name="movieName" class="form-control" type="text" value="${element.movieName}"/></h4>
+                    <div class="card-subtitle text-muted mb-2">Genre: <input name="genre" class="form-control" type="text" value="${element.genre}"/>
+                    </div>
+                    <div class="card-text mb-2">Price: <input name="price" class="form-control" type="text" value="${element.price}"/></div>
+                    <div class="card-text mb-2">Ratings: <input name="ratings" class="form-control" type="text" value="${element.rating}"/></div>
+                    <input type="hidden" name="userId" value="<%=userId %>"/>
+                    <input type="hidden" name="movieId" value="${element.movieId}"/>
+                    <button type="submit" class="btn btn-primary">Edit Movie Details</button>
+                    </form>
+                    <form action="/api/movies/delete" method="POST" class="d-inline" onSubmit="if(!confirm('Are you sure you want to delete?')){return false;}">
+                        <input type="hidden" name="movieId" value="${element.movieId}"/>
+                        <button type="submit" class="btn btn-danger">Delete Movie</button>
+                    </form>
+                </div>
+            </div>`;
+  }
+    })
+    
+    </script>

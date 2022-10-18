@@ -1,0 +1,41 @@
+<%- include("partials/header") %>
+<div class="container">
+    <h1>Chat with online users</h1>
+    <ul id="messagesBox" class="list-group">
+    </ul>
+    <div class="input-group mb-3" style="margin-top: 30px">
+        <input id="messageInput" type="text" class="form-control" placeholder="Type Message" aria-label="Search Movie" aria-describedby="basic-addon2">
+        <div class="input-group-append">
+          <button id="sendMessageButton" class="btn btn-primary" type="button">Send</button>
+        </div>
+      </div>
+</div>
+
+<%- include("partials/footer") %>
+<script>
+    // Create WebSocket connection.
+    const socket = new WebSocket('ws://localhost:8081');
+
+    // Connection opened
+    socket.addEventListener('open', function (event) {
+        displayMessage('You are conncted to group chat');
+    });
+
+    const displayMessage = (message)=>{
+        $('#messagesBox').append(`<li class="list-group-item">${message}</li>`)
+    }
+
+    // Listen for messages
+    socket.addEventListener('message', function (event) {
+        displayMessage(`${event.data}`)
+        
+    });
+
+    $('#sendMessageButton').on('click', ()=>{
+        var username = '<%- name %>';
+        const message = $('#messageInput').val()
+        socket.send(username + ": "+ message);
+        $('#messageInput').val("")
+    })
+    
+</script>
