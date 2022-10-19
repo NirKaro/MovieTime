@@ -30,15 +30,11 @@ app.use(passport.session());
 // Routes
 const apiRouter = require("./routes/api/api")
 const pagesRouter = require("./routes/pages/pages") // to implement...
-//const authRouter = require("./routes/auth/auth") // to implement...
-
 
 
 // Main pages router
 app.use('/', pagesRouter) // to implement...
 
-//Third party auth
-//app.use('/auth', authRouter) // to implement...
 
 // main API routes
 app.use('/api', apiRouter)
@@ -56,7 +52,7 @@ httpsServer = https.createServer({
 dbConnect().then(() => {
     console.log("[SUCCESS] Successfully connected to MongoDB Cloud")
     httpsServer.listen(process.env.SERVER_PORT, async() => {
-        console.log(`[SUCCESS] Started HTTPS server ${process.env.SERVER_HOST}:${process.env.SERVER_PORT}`)
+        console.log(`[SUCCESS] Started HTTPS server at https://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}`)
         console.log(`[SUCCESS] Started WEB SOCKET server ${process.env.SERVER_HOST}:${process.env.WEBSOCKET_PORT}`)
         wss.on('connection', (ws) => {
             const clientId = uuid4()
