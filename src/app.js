@@ -29,14 +29,13 @@ app.use(passport.session());
 
 // Routes
 const apiRouter = require("./routes/api/api")
-const pagesRouter = require("./routes/pages/pages") // to implement...
+const pagesRouter = require("./routes/pages/pages")
 
 
-// Main pages router
-app.use('/', pagesRouter) // to implement...
+// pages routes
+app.use('/', pagesRouter)
 
-
-// main API routes
+// api routes
 app.use('/api', apiRouter)
 
 
