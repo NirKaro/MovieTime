@@ -1,7 +1,7 @@
 const Movies = require("../../db/models/movies");
-const uuid4 = require("uuid4");
 const express = require("express");
 const Router = express.Router();
+const uuid4 = require("uuid4");
 const {
   CookieValidation,
   adminValidation,
@@ -14,23 +14,22 @@ Router.post("/", CookieValidation, async function (req, res) {
       movieId: uuid4(),
       movieName: req.body.movieName,
       genre: req.body.genre,
-      price: req.body.price,
       rating: req.body.rating,
       price: req.body.price,
       Reviews: req.body.Reviews,
     });
     await newMovie.save();
     console.log(
-      `[SUCCESS] New movie added successfully, movie ID: ${newMovie.movieID}`
+      `[SUCCESS] New movie with movieID: ${newMovie.movieID} added to db`
     );
     res.redirect("/admin");
   } catch (err) {
     console.log(`[FAIL] Failed to add new movie. ${err}`);
-    res.status(400).json("Received incorrect new movie format");
+    res.status(400).json("Wrong format provided");
   }
 });
 
-// Update movie information
+// Update movie info
 Router.post("/edit", CookieValidation, async function (req, res) {
   try {
     const movieId = req.body.movieId;
@@ -41,10 +40,10 @@ Router.post("/edit", CookieValidation, async function (req, res) {
     movie.price = req.body.price || movie.price;
 
     await movie.save();
-    console.log(`[SUCCESS] Changed movie ID ${movieId} information`);
+    console.log(`[SUCCESS] Changed information for movie: ${movieId}`);
     res.redirect("/admin");
   } catch (err) {
-    console.log(`[FAIL] Failed to change movie information, ${err}`);
+    console.log(`[FAIL] Changing information failed , ${err}`);
     res.sendStatus(400);
   }
 });
@@ -62,7 +61,7 @@ Router.post(
       );
       res.redirect("/admin");
     } catch (err) {
-      console.log(`[FAIL] Failed to change movie information, ${err}`);
+      console.log(`[FAIL] Failed to delete movie, ${err}`);
       res.sendStatus(400);
     }
   }

@@ -84,8 +84,8 @@ const loginValidation = async (req, res, next) => {
         );
         next();
       } else {
-        console.log("Client not found");
-        res.status(401).render("login.ejs", { errMsg: "Client not found" });
+        console.log("Client not found / Wrong username or password");
+        res.status(401).render("login.ejs", { errMsg: "Client not found / Wrong username or password" });
       }
     } else {
       console.log(`[FAIL] Wrong login information provided`);

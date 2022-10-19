@@ -5,9 +5,7 @@ const Clients = require("../../db/models/clients");
 const clientsRouter = require("./client");
 const OrdersRouter = require("./orders");
 const MoviesRouter = require("./movies");
-const notificationsRouter = require("./notifications");
 const {
-  CookieValidation,
   loginValidation,
 } = require("../../middlewares/authentication");
 
@@ -61,6 +59,5 @@ Router.use("/orders", OrdersRouter);
 
 Router.use("/movies", MoviesRouter);
 
-Router.use("/notifications", notificationsRouter);
 
 module.exports = Router;

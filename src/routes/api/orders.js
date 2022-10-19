@@ -41,7 +41,7 @@ Router.get("/counts", CookieValidation, async function (req, res) {
   }
 });
 
-// Get all order in DB that are associated with the current userId
+// Getting all orders for client
 Router.get("/", CookieValidation, async function (req, res) {
   try {
     const orders = await Orders.find({ userId: req.cookies.userId })
